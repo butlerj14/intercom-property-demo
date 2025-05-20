@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import properties from '@/data/properties';
+import properties from '../../data/properties';
+
 
 export default function PropertyPage() {
   const router = useRouter();
