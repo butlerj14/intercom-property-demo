@@ -7,12 +7,35 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (typeof window.Intercom === 'function') {
-      window.Intercom('update', {
-        last_visited_url: window.location.href,
-      });
-    }
-  }, [router.asPath]);
+    const intercomSettings = {
+      app_id: 't0dl0ok5',
+      email: 'test@saasypeople.com', // Replace with dynamic data if needed
+      name: 'Test User'              // Replace with dynamic data if needed
+    };
+
+    // Wait until Intercom is loaded
+    const bootIntercom = () => {
+      if (typeof window.Intercom === 'function') {
+        window.Intercom('boot', intercomSettings);
+      } else {
+        // If Intercom hasn't loaded yet, try again shortly
+        setTimeout(bootIntercom, 500);
+      }
+    };
+
+    bootIntercom();
+
+    const handleRouteChange = (url) => {
+      if (typeof window.Intercom === 'function') {
+        window.Intercom('update', {
+          last_visited_url: url,
+        });
+      }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => router.events.off('routeChangeComplete', handleRouteChange);
+  }, []);
 
   return (
     <>
