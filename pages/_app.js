@@ -7,19 +7,24 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
-    const handleRouteChange = (url) => {
-      if (window.Intercom) {
+    const waitAndSendUpdate = (retries = 10) => {
+      if (
+        typeof window.Intercom === 'function' &&
+        window.Intercom('getVisitorId')
+      ) {
         window.Intercom('update', {
-          last_visited_url: url,
+          last_visited_url: window.location.href,
         });
+      } else if (retries > 0) {
+        setTimeout(() => waitAndSendUpdate(retries - 1), 500);
       }
     };
 
-    handleRouteChange(window.location.href); // initial load
-    router.events.on('routeChangeComplete', handleRouteChange);
+    waitAndSendUpdate(); // on initial load
+    router.events.on('routeChangeComplete', waitAndSendUpdate);
 
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off('routeChangeComplete', waitAndSendUpdate);
     };
   }, [router.events]);
 
@@ -31,8 +36,7 @@ export default function App({ Component, pageProps }) {
         dangerouslySetInnerHTML={{
           __html: `
             window.intercomSettings = {
-              app_id: "t0dl0ok5",
-              "last_visited_url": window.location.href
+              app_id: "t0dl0ok5"
             };
 
             (function(){
