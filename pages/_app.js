@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }) {
     window.intercomSettings = {
   app_id: "t0dl0ok5",
   user_id: "user_123456",
-  last_visited_url: window.location.href
+  url_debug_test: window.location.href
 };
 
 (function(){
