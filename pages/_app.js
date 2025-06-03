@@ -41,7 +41,7 @@ export default function App({ Component, pageProps }) {
       var ic = w.Intercom;
       if (typeof ic === "function") {
         ic('reattach_activator');
-        ic('update', w.intercomSettings);
+        ic('boot', w.intercomSettings);
       } else {
         var d = document;
         var i = function() { i.c(arguments); };
