@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }) {
     const handleRouteChange = (url) => {
       if (window.Intercom) {
         window.Intercom("update", {
-          url_debug_test: url, // ✅ using safe custom attribute name
+          url_debug_test: window.location.origin + url, // ✅ full URL now
         });
       }
     };
