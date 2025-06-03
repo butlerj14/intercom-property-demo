@@ -32,6 +32,7 @@ export default function App({ Component, pageProps }) {
           __html: `
             window.intercomSettings = {
               app_id: "t0dl0ok5",
+              email: "test@example.com"
               last_visited_url: window.location.href
             };
 
