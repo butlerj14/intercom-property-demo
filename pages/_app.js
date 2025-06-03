@@ -1,7 +1,7 @@
-import '../styles/globals.css';
-import Script from 'next/script';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import "../styles/globals.css";
+import Script from "next/script";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -9,17 +9,17 @@ export default function App({ Component, pageProps }) {
   useEffect(() => {
     const handleRouteChange = (url) => {
       if (window.Intercom) {
-        window.Intercom('update', {
+        window.Intercom("update", {
           last_visited_url: url,
         });
       }
     };
 
     handleRouteChange(window.location.href); // initial load
-    router.events.on('routeChangeComplete', handleRouteChange);
+    router.events.on("routeChangeComplete", handleRouteChange);
 
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router.events]);
 
@@ -67,7 +67,6 @@ export default function App({ Component, pageProps }) {
     })();
   `,
         }}
-
       />
       <Component {...pageProps} />
     </>
