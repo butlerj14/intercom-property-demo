@@ -1,27 +1,26 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import properties from '../../data/properties';
 
-export default function PropertyPage() {
-  const router = useRouter();
-  const { slug } = router.query;
-  const [property, setProperty] = useState(null);
+export async function getStaticPaths() {
+  const paths = properties.map((p) => ({
+    params: { slug: p.slug }
+  }));
 
-  useEffect(() => {
-    if (!slug) return;
-    fetch(`/api/property/${slug}`)
-      .then((res) => res.json())
-      .then(setProperty)
-      .catch((err) => console.error('Failed to fetch property', err));
-  }, [slug]);
+  return { paths, fallback: false };
+}
 
-  useEffect(() => {
-    if (property) {
-      window.__currentProperty = property;
-    }
-  }, [property]);
+export async function getStaticProps({ params }) {
+  const property = properties.find((p) => p.slug === params.slug);
 
-  if (!property) return <p className="p-6">Loading...</p>;
+  if (!property) {
+    return { notFound: true };
+  }
 
+  return {
+    props: { property }
+  };
+}
+
+export default function PropertyPage({ property }) {
   return (
     <main className="p-6">
       <h1 className="text-2xl font-bold mb-2">{property.title}</h1>
