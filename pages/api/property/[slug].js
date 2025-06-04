@@ -1,4 +1,4 @@
-import properties from '../../data/properties';
+import properties from '../../../data/properties';
 
 export async function getStaticPaths() {
   const paths = properties.map((p) => ({
