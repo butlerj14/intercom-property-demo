@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Property {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  location    String
+  price       String
+  description String
+  type        String
+  bedrooms    Int
+  bathrooms   Int
+  sqft        Int
+  listedDate  String
+  amenities   String[] // native Postgres array
+  agentName   String
+  agentPhone  String
+  agentEmail  String
+}
