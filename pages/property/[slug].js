@@ -50,7 +50,9 @@ export default function PropertyPage({ property }) {
 
       <div className="mt-4">
         <h2 className="font-semibold">Agent:</h2>
-        <p>{property.agentName}</p>
+        <p><strong>Name:</strong> {property.agent.name}</p>
+        <p><strong>Phone:</strong> {property.agent.phone}</p>
+        <p><strong>Email:</strong> {property.agent.email}</p>
       </div>
     </main>
   );
