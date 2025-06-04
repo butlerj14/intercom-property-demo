@@ -8,16 +8,23 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     const handleRouteChange = (url) => {
-      if (window.Intercom) {
+      if (window.Intercom && url.includes("/property/")) {
+        const slug = url.split("/property/")[1];
         window.Intercom("update", {
-          url_debug_test: window.location.origin + url, // ✅ full URL now
+          url_debug_test: `${window.location.origin}/api/property/${slug}`,
         });
       }
     };
 
-    handleRouteChange(window.location.href); // initial update on load
-    router.events.on("routeChangeComplete", handleRouteChange);
+    // Run on initial page load
+    if (typeof window !== "undefined" && window.location.pathname.includes("/property/")) {
+      const slug = window.location.pathname.split("/property/")[1];
+      window.Intercom("update", {
+        url_debug_test: `${window.location.origin}/api/property/${slug}`,
+      });
+    }
 
+    router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
@@ -32,16 +39,15 @@ export default function App({ Component, pageProps }) {
           __html: `
             window.intercomSettings = {
               app_id: "t0dl0ok5",
-              user_id: "user_123456",
-              url_debug_test: window.location.href
+              user_id: "user_123456"
             };
 
             (function(){
               var w = window;
               var ic = w.Intercom;
               if (typeof ic === "function") {
-                ic('shutdown'); // prevent reboots in dev
-                ic('boot', w.intercomSettings); // ✅ one-time boot
+                ic('shutdown');
+                ic('boot', w.intercomSettings);
               } else {
                 var d = document;
                 var i = function() { i.c(arguments); };
